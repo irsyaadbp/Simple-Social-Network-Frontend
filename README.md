@@ -1,3 +1,5 @@
+# Simple-Social-Network-Frondend
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 This Project use Simple-Social-Network-API, you can get here https://github.com/masirsyaad/Simple-Social-Network-API
@@ -67,5 +69,4 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
-# Simple-Social-Network-Frondend
 
