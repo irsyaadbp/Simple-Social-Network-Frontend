@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 
 class SignIn extends Component {
   constructor() {
@@ -7,16 +8,25 @@ class SignIn extends Component {
       email: "",
       password: "",
       error: "",
-      redirectToReferer: false
+      redirectToReferer: false,
+      loading: false
     };
   }
   handleChange = name => event => {
     this.setState({ error: "" });
     this.setState({ [name]: event.target.value });
   };
+  authenticate(jwt, next) {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("jwt", JSON.stringify(jwt));
+      next();
+    }
+  }
 
   clickSubmit = event => {
     event.preventDefault();
+
+    this.setState({ loading: true });
 
     const { email, password } = this.state;
     const user = {
@@ -26,12 +36,13 @@ class SignIn extends Component {
 
     this.signIn(user).then(data => {
       if (data.error) {
-        this.setState({ error: data.error });
-      } else{
-          //authentication
-          //redirect
+        this.setState({ error: data.error, loading: false });
+      } else {
+        //authentication
+        this.authenticate(data, () => {
+          this.setState({ redirectToReferer: true });
+        });
       }
-        
     });
   };
 
@@ -77,7 +88,11 @@ class SignIn extends Component {
   );
 
   render() {
-    const { email, password, error } = this.state;
+    const { email, password, error, redirectToReferer, loading } = this.state;
+
+    if (redirectToReferer) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="container">
         <h2 className="mt-5 mb-5">Sign Up</h2>
@@ -87,6 +102,13 @@ class SignIn extends Component {
         >
           {error}
         </div>
+        {loading ? (
+          <div className="jumbotron text-center">
+            <h2>Loading...</h2>
+          </div>
+        ) : (
+          ""
+        )}
         {this.signInForm(email, password)}
       </div>
     );
